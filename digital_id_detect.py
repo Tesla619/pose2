@@ -2,7 +2,7 @@ from symbol import parameters
 import cv2
 #import cv2.aruco as aruco  #OLD
 
-def findMarker(img, markerSize=6, totalMarkers=250, draw=True):
+def findMarker(img, markerSize=6, totalMarkers=1000, draw=True):
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     key = getattr(cv2.aruco,f'DICT_{markerSize}X{markerSize}_{totalMarkers}')
     
@@ -21,8 +21,7 @@ def main():
     while True:
         #succ, img = cap.read()
         
-        #img = cv2.imread("3.png")          #OLD
-        img = cv2.imread("pose1\\3.png")    #NEW
+        img = cv2.imread("pose2\\id0v2.png")
         img = cv2.resize(img,(0,0),fx=0.7,fy=0.7)        
         
         findMarker(img)        
