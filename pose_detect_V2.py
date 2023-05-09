@@ -3,7 +3,7 @@ import cv2
 import time
 
 # Load the dictionary and parameters
-dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_7X7_1000)
+dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_1000)
 parameters = cv2.aruco.DetectorParameters_create()
 
 # Define the size of the markers (in meters)
