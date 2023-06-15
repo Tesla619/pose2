@@ -1,7 +1,5 @@
 close all; clear all; clc;
 
-% Set the 6 angles for the 5DoF robotic arm
-theta = [pi/4, pi/4, pi/4, pi/4, pi/4];
 % Initialize DH Parameters
 
 % Twist angle
@@ -44,4 +42,25 @@ Robot = SerialLink(L);
 Robot.name = 'Mentor Robotic Arm';
 
 % Plot the robot model
-Robot.plot(theta);
+counter = 0;
+
+while true
+
+    if counter < 45
+        counter = counter + 1;
+    else
+        counter = 0;
+    end
+    
+    Robot.plot([deg2rad(00 + counter), ...   % Base
+                deg2rad(90 + counter), ...   % Shoulder 
+                deg2rad(00 + counter), ...   % Elbow
+                deg2rad(90 + counter), ...   % End Effector
+                deg2rad(00 + counter)]);     % Pitch of End Effector
+
+    % Robot.plot([deg2rad(counter), ...
+    %             deg2rad(counter), ...
+    %             deg2rad(counter), ...
+    %             deg2rad(counter), ...
+    %             deg2rad(counter)]);
+end

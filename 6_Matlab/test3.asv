@@ -1,0 +1,75 @@
+close all; clear all; clc;
+
+% create a tcpip object
+t = tcpip('localhost', 12345);
+
+% open the connection
+fopen(t);
+
+% Initialize the Robot Simulation
+Robot = initializeRobotDH();
+
+% Main Loop
+while true
+
+    % read some data (read until terminator)
+    data = fscanf(t);
+
+    %%%%%% Code to parse the data into sections %%%%%% 
+
+    % check if data is not empty
+    if ~isempty(data)        
+        Robot.plot([deg2rad(00 + base), ...   % Base
+                    deg2rad(90 + data), ...   % Shoulder 
+                    deg2rad(00 + data), ...   % Elbow
+                    deg2rad(90 + data), ...   % End Effector
+                    deg2rad(00 + data)]);     % Pitch of End Effector
+    end
+
+    if isempty(data)
+        fprintf('Closing Connection...');
+        fclose(t);
+        break;
+    end
+end
+
+function Robot = initializeRobotDH()
+    % Twist angle
+    Alpha1 = deg2rad(90);
+    Alpha2 = deg2rad(0);
+    Alpha3 = deg2rad(0);
+    Alpha4 = deg2rad(90);
+    Alpha5 = deg2rad(0);
+
+    % Link length
+    a1 = 0;
+    a2 = 165;
+    a3 = 150;
+    a4 = 0;
+    a5 = 0;
+
+    % Link offset
+    d1 = 185;
+    d2 = -100;
+    d3 = 100;
+    d4 = 0;
+    d5 = 110;
+
+    % Build up arm in terms of serial links using the DH params
+    L(1) = Link([0 d1 a1 Alpha1]);
+    L(2) = Link([0 d2 a2 Alpha2]);
+    L(3) = Link([0 d3 a3 Alpha3]);
+    L(4) = Link([0 d4 a4 Alpha4]);
+    L(5) = Link([0 d5 a5 Alpha5]);
+
+    % Set the joints limits
+    L(1).qlim = [deg2rad(-120) deg2rad(120)];
+    L(2).qlim = [deg2rad(0) deg2rad(150)];
+    L(3).qlim = [deg2rad(-90) deg2rad(90)];
+    L(4).qlim = [deg2rad(15) deg2rad(165)];
+    L(5).qlim = [deg2rad(-180) deg2rad(180)];
+
+    % Compute all serial links and state the name
+    Robot = SerialLink(L);
+    Robot.name = 'Mentor Robotic Arm';
+end
