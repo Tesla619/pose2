@@ -24,7 +24,7 @@ def visualise_on_image(image, bboxes, labels, scores, thresh):
             xmax, ymax = int(bbox[3]*w), int(bbox[2]*h)
 
             cv2.rectangle(image, (xmin, ymin), (xmax, ymax), (0,255,0), 2)
-            cv2.putText(image, f"{label}: {int(score*100)} %", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+            cv2.putText(image, f"{label}: {int(score*100)} %", (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 2)
                         
             #cv2.putText(frame, "xmin: " + str(xmin) + " xmax: " + str(xmax) + " ymin: " + str(ymin) + " ymax: " + str(ymax), (50,50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1)    
     return image
@@ -137,7 +137,8 @@ if __name__ == '__main__':
         # print("Distance: ", Distance)        
         
         # calling face_data function
-        face_width_in_frame = width(frame, bboxes, labels, scores, score_thresh)
+        #UNCOMMENT LATER# face_width_in_frame = width(frame, bboxes, labels, scores, score_thresh)
+        face_width_in_frame = 0
         # finding the distance by calling function Distance
         if face_width_in_frame != 0:
             Distance = Distance_finder(focal_length_found, Known_width, face_width_in_frame)

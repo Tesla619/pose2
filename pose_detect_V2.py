@@ -36,6 +36,9 @@ while True:
         for i in range(len(ids)):
             cv2.aruco.drawDetectedMarkers(frame, corners, ids)
             cv2.aruco.drawAxis(frame, camera_matrix, distortion_coefficients, rvecs[i], tvecs[i], marker_size)
+    
+    # Display the frame
+    cv2.imshow('frame', frame)
 
     # Check for the 'q' key to exit
     if cv2.waitKey(1) & 0xFF == ord('q'):
