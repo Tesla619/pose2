@@ -1,3 +1,4 @@
+import random
 import time
 import asyncio
 import websockets
@@ -7,8 +8,8 @@ import cv2
 import numpy as np
 from object_detection.utils import label_map_util
 
-# Define the terminator
-terminator = '\n'  # Newline character as the terminator
+# Simulated Arm Max Degree of Movment
+max_angle = 45 + 1
 
 # Load the dictionary and parameters
 dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_100)
@@ -30,7 +31,7 @@ category_index=label_map_util.create_category_index_from_labelmap("customTF2/dat
 
 def send_to_matlab(variable):
     # Convert variable to a string and add the terminator
-    data = str(variable) + terminator
+    data = str(variable) + '\n'  # Newline character as the terminator
     
     # Send the data
     c.send(data.encode()) 
@@ -137,7 +138,10 @@ async def receive_frames():
                 # Logic of combination of markers to determine the robot's pose            
                 # Send the robot's pose to matlab via websocket
                 
-                send_to_matlab(ids) # Send the robot's pose to matlab via websocket as one string to be parsed
+                # Just to Generate movment for testing
+                numbers = random.sample(range(max_angle), 5)
+                random_res = ','.join(map(str, numbers))
+                send_to_matlab(random_res) # Send the robot's pose to matlab via websocket as one string to be parsed
 
             ############################## Output Overlays #########################################
 
