@@ -57,7 +57,7 @@ print('Got connection from', addr)
 
 while True:           
     # Define the terminator
-    terminator = '\n'  # Example: Newline character as the terminator
+    terminator = '\n'  # Newline character as the terminator
 
     # Convert the counter to a string and add the terminator
     data = str(counter) + terminator
