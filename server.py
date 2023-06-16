@@ -24,7 +24,7 @@ async def video_feed(websocket, path):
         # Send the frame over the websocket
         await websocket.send(data)        
         
-        print("working")
+        #print("working")
 
 
     cap.release()
