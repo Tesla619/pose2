@@ -4,6 +4,9 @@ import numpy as np
 import time
 import websockets
 
+# '100.77.189.76' #hp
+# '100.89.155.88' #epyc
+
 async def receive_frames():
     async with websockets.connect('ws://100.77.189.76:8765') as websocket:
         cap = cv2.VideoCapture(0)

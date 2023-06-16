@@ -77,5 +77,5 @@ function Robot = initializeRobotDH()
 
     % Compute all serial links and state the name
     Robot = SerialLink(L);
-    Robot.name = 'Mentor Robotic Arm';
+    Robot.name = 'Robot';
 end
