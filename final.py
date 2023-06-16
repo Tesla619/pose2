@@ -7,6 +7,9 @@ import cv2
 import numpy as np
 from object_detection.utils import label_map_util
 
+# Define the terminator
+terminator = '\n'  # Newline character as the terminator
+
 # Load the dictionary and parameters
 dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_100)
 parameters = cv2.aruco.DetectorParameters_create()
@@ -24,6 +27,13 @@ PATH_TO_SAVED_MODEL = "customTF2/data/inference_graph/saved_model"
 
 # Load label map and obtain class names and ids
 category_index=label_map_util.create_category_index_from_labelmap("customTF2/data/label_map.pbtxt",use_display_name=True)
+
+def send_to_matlab(variable):
+    # Convert variable to a string and add the terminator
+    data = str(variable) + terminator
+    
+    # Send the data
+    c.send(data.encode()) 
 
 def visualise_on_image(image, bboxes, labels, scores, thresh):    
     (h, w, d) = image.shape
@@ -47,8 +57,8 @@ async def receive_frames():
         #video_capture = cv2.VideoCapture(0)
         start_time = time.time()
     
-        frame_width = 1280 # int(video_capture.get(3))
-        frame_height = 720 # int(video_capture.get(4))
+        frame_width = 640 # int(video_capture.get(3))
+        frame_height = 480 # int(video_capture.get(4))
         size = (frame_width, frame_height)
     
         #Initialize video writer
@@ -126,6 +136,8 @@ async def receive_frames():
                 # Interpolate the joint movment on each marker 
                 # Logic of combination of markers to determine the robot's pose            
                 # Send the robot's pose to matlab via websocket
+                
+                send_to_matlab(ids) # Send the robot's pose to matlab via websocket as one string to be parsed
 
             ############################## Output Overlays #########################################
 
@@ -147,7 +159,21 @@ async def receive_frames():
                 break                       
         
         #video_capture.release()
-        websockets.disconnect() # CHECK THIS
+        c.close()
 
 if __name__ == '__main__':
+    
+    # create a socket object
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)     
+
+    # Setting the machine as server for matlab to connect to
+    s.bind(('localhost', 12345))
+
+    # put the socket into listening mode
+    s.listen(5)
+
+    # establish a connection with matlab
+    c, addr = s.accept()
+    
+    # receive webcam feed
     asyncio.get_event_loop().run_until_complete(receive_frames())

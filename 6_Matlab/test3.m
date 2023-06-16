@@ -14,6 +14,7 @@ while true
 
     % read some data (read until terminator)
     data = fscanf(t);
+    fprintf('Received data: %s\n', data);
 
     %%%%%% Code to parse the data into sections %%%%%% 
     base_deg = 0;   % Base

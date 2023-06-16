@@ -25,8 +25,7 @@ async def video_feed(websocket, path):
         await websocket.send(data)        
         
         #print("working")
-
-
+        
     cap.release()
 
 # Start the websocket server
